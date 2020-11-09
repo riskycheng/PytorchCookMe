@@ -139,3 +139,11 @@ def train_ch3(net, train_iter, test_iter, loss, num_epochs, batch_size,
         test_acc = evaluate_accuracy(test_iter, net)
         print('epoch %d, loss %.4f, train acc %.3f, test acc %.3f'
               % (epoch + 1, train_l_sum / n, train_acc_sum / n, test_acc))
+
+
+def xyplot(x_vals, y_vals, name):
+    set_figureSize(figsize=(5, 2.5))
+    plt.plot(x_vals.detach().numpy(), y_vals.detach().numpy())
+    plt.xlabel('x')
+    plt.ylabel(name + '(x)')
+    plt.show()
