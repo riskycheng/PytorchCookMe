@@ -59,19 +59,25 @@ def show_fashion_mnist(images, labels):
 
 
 # 加载 Train-set Test-set
-def load_fashion_mnist_dataset(batch_size):
+def load_fashion_mnist_dataset(batch_size, resize=None):
+    trans = []
+    if resize:
+        trans.append(torchvision.transforms.Resize(size=resize))
+    trans.append(torchvision.transforms.ToTensor())
+    transform = torchvision.transforms.Compose(trans)
+
     mnist_train = torchvision.datasets.FashionMNIST(
         root='h:/dataset/FashionMNIST',
         train=True,
         download=True,
-        transform=transforms.ToTensor()
+        transform=transform
     )
 
     mnist_test = torchvision.datasets.FashionMNIST(
         root='h:/dataset/FashionMNIST',
         train=False,
         download=True,
-        transform=transforms.ToTensor()
+        transform=transform
     )
     if sys.platform.startswith('win'):
         num_workers = 0
