@@ -8,6 +8,7 @@ import torchvision
 import torchvision.transforms as transforms
 from torch import nn
 from torch.nn import init
+import torch.nn.functional as F
 
 
 # 定义优化函数
@@ -198,3 +199,12 @@ def train_ch5(net, train_iter, test_iter, batch_size, optimizer, device, num_epo
         test_acc = evaluate_accuracy(test_iter, net)
         print('epoch %d, loss %.4f, train acc %.3f, test acc %.3f, time %.1f sec'
               % (epoch + 1, train_l_sum / batch_count, train_acc_sum / n, test_acc, time.time() - start))
+
+
+class GlobalAvgPool2d(nn.Module):
+    # 全局平均池化层可通过将池化窗口形状设置成输入的高和宽实现
+    def __init__(self):
+        super(GlobalAvgPool2d, self).__init__()
+
+    def forward(self, x):
+        return F.avg_pool2d(x, kernel_size=x.size()[2:])
