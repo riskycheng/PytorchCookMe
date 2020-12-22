@@ -1,5 +1,5 @@
+# coding:utf-8
 import time
-from abc import ABC
 
 import torch
 from torch import nn, optim
@@ -9,7 +9,7 @@ from Commons import LocalUtils
 device = torch.device('cpu' if torch.cuda.is_available() else 'cpu')
 
 
-class Residual(nn.Module, ABC):
+class Residual(nn.Module):
     def __init__(self, in_channels, out_channels, use_1x1conv=False, stride=1):
         super(Residual, self).__init__()
         self.conv1 = nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=3, padding=1,

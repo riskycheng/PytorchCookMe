@@ -1,3 +1,4 @@
+# coding:utf-8
 import random
 from IPython import display
 from matplotlib import pyplot as plt
@@ -9,6 +10,7 @@ import torchvision.transforms as transforms
 from torch import nn
 from torch.nn import init
 import torch.nn.functional as F
+from torch.utils.data import Dataset, DataLoader
 
 
 # 定义优化函数
@@ -241,10 +243,35 @@ def data_iter_consecutive(corpus_indices, batch_size, num_steps, device=None):
     corpus_indices = torch.tensor(corpus_indices, dtype=torch.float32, device=device)
     data_len = len(corpus_indices)
     batch_len = data_len // batch_size
-    indices = corpus_indices[0 : batch_size * batch_len].view(batch_size, batch_len)
-    epoch_size = (batch_len - 1) //num_steps
+    indices = corpus_indices[0: batch_size * batch_len].view(batch_size, batch_len)
+    epoch_size = (batch_len - 1) // num_steps
     for i in range(epoch_size):
         i = i * num_steps
-        X = indices[:, i : i + num_steps]
-        Y = indices[:, i + 1 : i + num_steps + 1]
+        X = indices[:, i: i + num_steps]
+        Y = indices[:, i + 1: i + num_steps + 1]
         yield X, Y
+
+
+# show image
+def show_images(imgs, num_rows, num_cols, scale=2):
+    figsize = (num_cols * scale, num_rows * scale)
+    _, axes = plt.subplots(num_rows, num_cols, figsize=figsize)
+    for i in range(num_rows):
+        for j in range(num_cols):
+            axes[i][j].imshow(imgs[i * num_cols + j])
+            axes[i][j].axes.get_xaxis().set_visible(False)
+            axes[i][j].axes.get_yaxis().set_visible(False)
+    return axes
+
+
+# apply with different transforms and show
+def apply(img, aug, num_rows=2, num_cols=4, scale=4):
+    Y = [aug(img) for _ in range(num_cols * num_rows)]
+    show_images(Y, num_rows, num_cols, scale)
+
+
+# define function to load CIFAR-10 dataset
+def load_cifar10(is_train, augs, batch_size, root='/home/jiache/dataset/CIFAR_10'):
+    num_workers = 0 if sys.platform.startswith('win32') else 4
+    dataset = torchvision.datasets.CIFAR10(root=root, train=is_train, transform=augs, download=True)
+    return DataLoader(dataset=dataset, batch_size=batch_size, shuffle=is_train, num_workers=num_workers)
