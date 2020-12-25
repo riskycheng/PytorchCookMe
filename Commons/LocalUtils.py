@@ -11,7 +11,7 @@ from torch import nn
 from torch.nn import init
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
-
+from torchvision.datasets import ImageFolder
 
 # 定义优化函数
 def sgdOpt(params, lr, batch_size):
