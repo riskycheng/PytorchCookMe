@@ -8,7 +8,7 @@ from torchvision import models
 import os
 import sys
 from Commons import LocalUtils
-
+torch.cuda.set_device(1)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 data_dir = '/home/jiache/dataset/'
@@ -57,7 +57,7 @@ optimizer = optim.SGD(
     lr=lr, weight_decay=0.001)
 
 # start training
-train_iter = DataLoader((train_imgs, train_augs), batch_size=12, shuffle=True)
-test_iter = DataLoader((test_imgs, test_augs), batch_size=12, shuffle=True)
-LocalUtils.train_ch5(pretrained_net, train_iter=train_iter, test_iter=test_iter, batch_size=12, optimizer=optimizer,
+train_iter = DataLoader(ImageFolder(os.path.join(data_dir, 'hotdog/train'), transform=train_augs), batch_size=128, shuffle=True)
+test_iter = DataLoader(ImageFolder(os.path.join(data_dir, 'hotdog/test'), transform=test_augs), batch_size=128, shuffle=True)
+LocalUtils.train_ch5(pretrained_net, train_iter=train_iter, test_iter=test_iter, batch_size=128, optimizer=optimizer,
                      num_epochs=5, device=device)
