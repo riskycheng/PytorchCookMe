@@ -13,6 +13,7 @@ import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
 from torchvision.datasets import ImageFolder
 
+
 # 定义优化函数
 def sgdOpt(params, lr, batch_size):
     for param in params:
@@ -180,10 +181,11 @@ def evaluate_accuracy(data_iter, net, device=None):
     return acc_sum / n
 
 
-def train_ch5(net, train_iter, test_iter, batch_size, optimizer, device, num_epochs):
+def train_ch5(net, train_iter, test_iter, batch_size, optimizer, device, num_epochs, saveModel=False):
     net = net.to(device)
     print("training on ", device)
     loss = torch.nn.CrossEntropyLoss()
+    best_acc = 0.0
     for epoch in range(num_epochs):
         train_l_sum, train_acc_sum, n, batch_count, start = 0.0, 0.0, 0, 0, time.time()
         for X, y in train_iter:
@@ -201,6 +203,8 @@ def train_ch5(net, train_iter, test_iter, batch_size, optimizer, device, num_epo
         test_acc = evaluate_accuracy(test_iter, net)
         print('epoch %d, loss %.4f, train acc %.3f, test acc %.3f, time %.1f sec'
               % (epoch + 1, train_l_sum / batch_count, train_acc_sum / n, test_acc, time.time() - start))
+        if saveModel and best_acc < test_acc:
+            torch.save(net, 'model_' + str(test_acc) + '.pth')
 
 
 class GlobalAvgPool2d(nn.Module):
