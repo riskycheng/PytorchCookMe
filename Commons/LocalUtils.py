@@ -204,7 +204,7 @@ def train_ch5(net, train_iter, test_iter, batch_size, optimizer, device, num_epo
         print('epoch %d, loss %.4f, train acc %.3f, test acc %.3f, time %.1f sec'
               % (epoch + 1, train_l_sum / batch_count, train_acc_sum / n, test_acc, time.time() - start))
         if saveModel and best_acc < test_acc:
-            torch.save(net, 'model_' + str(test_acc) + '.pth')
+            torch.save(net, 'model_catsAndDogs2020.pth')
 
 
 class GlobalAvgPool2d(nn.Module):

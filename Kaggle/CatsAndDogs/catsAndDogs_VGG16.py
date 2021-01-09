@@ -12,7 +12,7 @@ from torchvision import models
 torch.cuda.set_device(1)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-data_dir = '/home/jiache/dataset/cats_and_dogs/'
+data_dir = '/home/jiache/dataset/cats_and_dogs_2020/cats_vs_dogs'
 
 # define the data transforms
 data_transform = transforms.Compose([

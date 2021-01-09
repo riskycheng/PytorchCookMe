@@ -15,7 +15,7 @@ import numpy as np
 torch.cuda.set_device(1)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-data_dir = '/home/jiache/dataset/cats_and_dogs/official_test'
+data_dir = '/home/jiache/dataset/cats_and_dogs_2020/test'
 
 # define the data transforms
 data_transform = transforms.Compose([
@@ -29,7 +29,7 @@ num_workers = 4
 # train dataset
 
 
-net = torch.load('./model_0.92.pth')
+net = torch.load('./model_catsAndDogs2020.pth')
 net.cuda()
 net.eval()
 
@@ -46,5 +46,5 @@ for image in imagesPath:
     results.write(os.path.join(data_dir, image))
     results.write(',')
     results.write(result)
-    results.write('\n302afioprtvw')
+    results.write('\n')
 results.close()
